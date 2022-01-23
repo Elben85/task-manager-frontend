@@ -7,8 +7,8 @@ export const SignUpError = {
 };
 
 export const SearchMethod = {
-  ByTitle: 0,
-  ByTags: 1
+  ByTitle: "0",
+  ByTags: "1"
 };
 
 export const TaskCellState = {

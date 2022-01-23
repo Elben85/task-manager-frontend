@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import searchIcon from "../image/search.png";
-import { SearchMethod } from "./enum";
+import { SearchMethod, Categories } from "./enum";
 
 const Container = styled.div`
   display: flex;
@@ -37,9 +37,14 @@ const Input = styled.input`
   }
 `;
 
-export default function SearchBar({ setSearchMethod, setSearchInput }) {
+export default function SearchBar({
+  searchMethod,
+  setSearchMethod,
+  setSearchInput
+}) {
   function handleMethodChange(event) {
     setSearchMethod(event.target.value);
+    setSearchInput("");
   }
 
   function handleInputChange(event) {
@@ -54,11 +59,25 @@ export default function SearchBar({ setSearchMethod, setSearchInput }) {
           <option value={SearchMethod.ByTitle}> By Title </option>
           <option value={SearchMethod.ByTags}> By Tags </option>
         </Select>
-        <Input
-          type="text"
-          onChange={handleInputChange}
-          placeholder="Search..."
-        />
+
+        {searchMethod === SearchMethod.ByTitle ? (
+          <Input
+            type="text"
+            onChange={handleInputChange}
+            placeholder="Search..."
+          />
+        ) : (
+          <Select name="tags" onChange={handleInputChange}>
+            <option value=""> Any </option>
+            <option value={Categories.General}> General </option>
+            <option value={Categories.Health}> Health </option>
+            <option value={Categories.Career}> Career </option>
+            <option value={Categories.Relationship}> Relationship </option>
+            <option value={Categories.Learning}> Learning </option>
+            <option value={Categories.Enjoyment}> Enjoyment </option>
+            <option value={Categories.Others}> Others </option>
+          </Select>
+        )}
       </Container>
     </>
   );

@@ -77,6 +77,7 @@ export default function Tasks() {
         <NavBar />
         <Container>
           <SearchBar
+            searchMethod={searchMethod}
             setSearchMethod={setSearchMethod}
             setSearchInput={setSearchInput}
           />

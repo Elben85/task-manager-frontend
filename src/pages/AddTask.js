@@ -4,7 +4,7 @@ import API from "../API/API";
 import { NavBar } from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../components/UserContext";
-import { TaskCellState, TaskType } from "../components/enum";
+import { Categories, TaskType } from "../components/enum";
 import { useEffect } from "react/cjs/react.development";
 
 const Container = styled.div`
@@ -83,9 +83,9 @@ export default function AddTask() {
     userId: userContext.userId,
     taskName: "",
     description: "",
-    tags: "",
+    tags: Categories.General,
     schedule: "",
-    taskType: TaskType.OneTime,
+    taskType: TaskType.OneTime
   });
   const navigate = useNavigate();
 
@@ -99,7 +99,7 @@ export default function AddTask() {
   function handleChange(event) {
     setTask({
       ...task,
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value
     });
   }
 
@@ -107,7 +107,7 @@ export default function AddTask() {
     setTask({
       ...task,
       taskType: event.target.value,
-      schedule: "",
+      schedule: ""
     });
   }
 
@@ -125,7 +125,15 @@ export default function AddTask() {
           <label> Description </label>
           <InputDesc name="description" type="text" onChange={handleChange} />
           <label> Tags </label>
-          <Input name="tags" type="text" onChange={handleChange} />
+          <Select name="tags" onChange={handleChange}>
+            <option value={Categories.General}> General </option>
+            <option value={Categories.Health}> Health </option>
+            <option value={Categories.Career}> Career </option>
+            <option value={Categories.Relationship}> Relationship </option>
+            <option value={Categories.Learning}> Learning </option>
+            <option value={Categories.Enjoyment}> Enjoyment </option>
+            <option value={Categories.Others}> Others </option>
+          </Select>
           <label> Type </label>
           <Select onChange={handleTypeChange}>
             <option value={TaskType.OneTime}> One Time</option>

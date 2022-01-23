@@ -7,7 +7,7 @@ import SignUp from "./pages/SignUp";
 import LogIn from "./pages/LogIn";
 import AddTask from "./pages/AddTask";
 import UserContextProvider from "./components/UserContext";
-import EditTask from "./components/EditTask";
+import EditTask from "./pages/EditTask";
 import SignOut from "./pages/SignOut";
 
 function App() {

@@ -1,17 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import API from "../API/API";
-import { NavBar } from "./NavBar";
+import { NavBar } from "../components/NavBar";
 import { useLocation, useNavigate } from "react-router-dom";
-import { TaskType } from "./enum";
-import { UserContext } from "./UserContext";
+import { TaskType, Categories } from "../components/enum";
+import { UserContext } from "../components/UserContext";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   row-gap: 30px;
-  padding: 20px;
+  padding: 80px 20px;
   width: 100%;
 `;
 
@@ -96,7 +96,7 @@ export default function EditTask() {
   function handleChange(event) {
     setTask({
       ...task,
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value
     });
   }
 
@@ -104,7 +104,7 @@ export default function EditTask() {
     setTask({
       ...task,
       taskType: event.target.value,
-      schedule: "",
+      schedule: ""
     });
   }
 
@@ -132,12 +132,15 @@ export default function EditTask() {
             value={task.description}
           />
           <label> Tags </label>
-          <Input
-            name="tags"
-            type="text"
-            onChange={handleChange}
-            value={task.tags}
-          />
+          <Select name="tags" onChange={handleChange} value={task.tags}>
+            <option value={Categories.General}> General </option>
+            <option value={Categories.Health}> Health </option>
+            <option value={Categories.Career}> Career </option>
+            <option value={Categories.Relationship}> Relationship </option>
+            <option value={Categories.Learning}> Learning </option>
+            <option value={Categories.Enjoyment}> Enjoyment </option>
+            <option value={Categories.Others}> Others </option>
+          </Select>
           <label> Schedule </label>
           <Select onChange={handleTypeChange} value={task.taskType}>
             <option value={TaskType.OneTime}> One Time</option>

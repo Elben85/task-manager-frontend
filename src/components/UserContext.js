@@ -18,7 +18,7 @@ export default function UserContextProvider({ children }) {
     }
     setUser(JSON.parse(currentUser));
     setIsLoading(false);
-  });
+  }, []);
 
   return (
     <UserContext.Provider

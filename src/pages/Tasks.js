@@ -7,6 +7,7 @@ import API from "../API/API";
 import { UserContext } from "../components/UserContext";
 import SearchBar from "../components/SearchBar";
 import { SearchMethod } from "../components/enum";
+import LoadingPage from "./LoadingPage";
 
 const Container = styled.div`
   display: flex;
@@ -39,14 +40,17 @@ export default function Tasks() {
   const [task, setTask] = useState([]);
   const [searchMethod, setSearchMethod] = useState(SearchMethod.ByTitle);
   const [searchInput, setSearchInput] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const getTask = async () =>
-    API.get("/task").then((response) => {
-      setTask(
-        response.data.filter((task) => task.userId === userContext.userId)
-      );
-    });
+    API.get("/task")
+      .then((response) => {
+        setTask(
+          response.data.filter((task) => task.userId === userContext.userId)
+        );
+      })
+      .then(setIsLoading(false));
 
   useEffect(() => {
     if (userContext.isLoggedIn) {
@@ -65,20 +69,23 @@ export default function Tasks() {
       : task.filter((elem) =>
           elem.tags.toUpperCase().includes(searchInput.toUpperCase())
         );
-
-  return (
-    <>
-      <NavBar />
-      <Container>
-        <SearchBar
-          setSearchMethod={setSearchMethod}
-          setSearchInput={setSearchInput}
-        />
-        <Link to="/AddTask">
-          <Option> Add Task</Option>
-        </Link>
-        <TasksTable task={filteredTask} setTask={setTask} />
-      </Container>
-    </>
-  );
+  if (isLoading) {
+    return <LoadingPage />;
+  } else {
+    return (
+      <>
+        <NavBar />
+        <Container>
+          <SearchBar
+            setSearchMethod={setSearchMethod}
+            setSearchInput={setSearchInput}
+          />
+          <Link to="/AddTask">
+            <Option> Add Task</Option>
+          </Link>
+          <TasksTable task={filteredTask} setTask={setTask} />
+        </Container>
+      </>
+    );
+  }
 }

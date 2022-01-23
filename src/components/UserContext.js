@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import LoadingPage from "../pages/Loading";
+import LoadingPage from "../pages/LoadingPage";
 
 export const UserContext = createContext();
 

@@ -19,7 +19,7 @@ const Loader = styled.div`
   border-radius: 50%;
   width: 60px;
   height: 60px;
-  animation: spin 0.2s linear infinite;
+  animation: ${spin} 0.5s linear infinite;
 `;
 
 export default function LoadingPage() {

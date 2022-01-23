@@ -69,7 +69,7 @@ export default function LogIn() {
   const [userList, setUserList] = useState([]);
   const [credentials, setCredentials] = useState({
     username: "",
-    password: "",
+    password: ""
   });
   const [showPopUp, setShowPopUp] = useState(false);
   const { setUserContext } = useContext(UserContext);
@@ -90,12 +90,13 @@ export default function LogIn() {
     if (filtered.length === 0) {
       setShowPopUp(true);
     } else {
-      setUserContext({
+      const user = {
         isLoggedIn: true,
         userId: filtered[0].id,
-        username: filtered[0].username,
-      });
-
+        username: filtered[0].username
+      };
+      setUserContext(user);
+      localStorage.setItem("user", JSON.stringify(user));
       navigate("/Tasks");
     }
   }
@@ -103,7 +104,7 @@ export default function LogIn() {
   function handleChange(event) {
     setCredentials({
       ...credentials,
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value
     });
   }
 

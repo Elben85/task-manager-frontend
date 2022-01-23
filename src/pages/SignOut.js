@@ -43,11 +43,13 @@ export default function SignOut() {
   }, []);
 
   function handleConfirmClick() {
-    setUserContext({
+    const user = {
       isLoggedIn: false,
       userId: "",
-      username: "",
-    });
+      username: ""
+    };
+    setUserContext(user);
+    localStorage.setItem("user", JSON.stringify(user));
     navigate("/LogIn");
   }
 

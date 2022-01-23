@@ -103,7 +103,7 @@ export default function EditTask() {
   function handleTypeChange(event) {
     setTask({
       ...task,
-      type: event.target.value,
+      taskType: event.target.value,
       schedule: "",
     });
   }
@@ -139,20 +139,20 @@ export default function EditTask() {
             value={task.tags}
           />
           <label> Schedule </label>
-          <Select onChange={handleTypeChange} value={task.type}>
+          <Select onChange={handleTypeChange} value={task.taskType}>
             <option value={TaskType.OneTime}> One Time</option>
             <option value={TaskType.Daily}> Daily </option>
             <option value={TaskType.Weekly}> Weekly </option>
           </Select>
           <label> Schedule </label>
-          {task.type === TaskType.OneTime ? (
+          {task.taskType === TaskType.OneTime ? (
             <Input
               name="schedule"
               type="date"
               onChange={handleChange}
               value={task.schedule}
             />
-          ) : task.type === TaskType.Daily ? (
+          ) : task.taskType === TaskType.Daily ? (
             <Input
               name="schedule"
               type="time"

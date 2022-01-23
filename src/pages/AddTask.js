@@ -85,7 +85,7 @@ export default function AddTask() {
     description: "",
     tags: "",
     schedule: "",
-    type: TaskType.OneTime,
+    taskType: TaskType.OneTime,
   });
   const navigate = useNavigate();
 
@@ -106,7 +106,7 @@ export default function AddTask() {
   function handleTypeChange(event) {
     setTask({
       ...task,
-      type: event.target.value,
+      taskType: event.target.value,
       schedule: "",
     });
   }
@@ -133,9 +133,9 @@ export default function AddTask() {
             <option value={TaskType.Weekly}> Weekly </option>
           </Select>
           <label> Schedule </label>
-          {task.type === TaskType.OneTime ? (
+          {task.taskType === TaskType.OneTime ? (
             <Input name="schedule" type="date" onChange={handleChange} />
-          ) : task.type === TaskType.Daily ? (
+          ) : task.taskType === TaskType.Daily ? (
             <Input name="schedule" type="time" onChange={handleChange} />
           ) : (
             <Select name="schedule" onChange={handleChange}>

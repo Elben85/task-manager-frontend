@@ -59,6 +59,12 @@ const Submit = styled.button`
   }
 `;
 
+const Input = styled.input`
+  border: 2px solid black;
+  padding: 10px;
+  font-size: 16px;
+`;
+
 export default function SignUp() {
   const [input, setInput] = useState({
     username: "",
@@ -109,7 +115,11 @@ export default function SignUp() {
     } else if (isEmailUnavailable()) {
       setPopUp(SignUpError.EmailUnavailable);
     } else {
-      await API.post("/users", input).then(navigate("/LogIn"));
+      await API.post("/users", {
+        username: input.username,
+        email: input.email,
+        password: input.password,
+      }).then(navigate("/LogIn"));
     }
   }
 
@@ -123,25 +133,31 @@ export default function SignUp() {
         <FormContainer>
           <Form>
             <label>Username</label>
-            <input
+            <Input
               name="username"
               type="text"
               placeholder="Username"
               onChange={handleChange}
             />
             <label> Email </label>
-            <input
+            <Input
               name="email"
               type="text"
               placeholder="Email"
               onChange={handleChange}
             />
             <label> Password </label>
-            <input name="password" type="password" onChange={handleChange} />
+            <Input
+              name="password"
+              type="password"
+              placeholder="Password"
+              onChange={handleChange}
+            />
             <label> Confirm Password </label>
-            <input
+            <Input
               name="confirmPassword"
               type="password"
+              placeholder="Confirm Password"
               onChange={handleChange}
             />
           </Form>

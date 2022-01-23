@@ -22,7 +22,7 @@ const ExpandIcon = styled.img`
   &:hover {
     transition: 0.2s;
     scale: 1.1;
-    box-shadow: 0px 0px 5px 5px white;
+    box-shadow: 0px 0px 5px 5px #b026ff;
   }
 `;
 

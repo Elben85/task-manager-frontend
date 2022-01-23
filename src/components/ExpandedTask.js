@@ -3,25 +3,27 @@ import dropdownIcon from "../image/dropdown.png";
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  row-gap: 10px;
+  flex-direction: row;
+  column-gap: 10px;
 `;
 
 const Divider = styled.div`
   flex: 1 1 auto;
-  background: white;
+  background: #004eff;
+  box-shadow: 0px 0px 1px 0px white;
   min-height: 3px;
-  min-width: 3px;
 `;
 
-const TitleContainer = styled.div`
+const TaskContainer = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100%;
-  column-gap: 10px;
+  row-gap: 10px;
 `;
 
 const Title = styled.div`
   flex: 1 1 auto;
+  min-height: 56px;
 `;
 
 const Description = styled.div`
@@ -43,23 +45,23 @@ const CollapseIcon = styled.img`
   &:hover {
     transition: 0.2s;
     scale: 1.1;
-    box-shadow: 0px 0px 5px 5px white;
+    box-shadow: 0px 0px 5px 5px #b026ff;
   }
 `;
 
 export default function ExpandedTask({
   taskName,
   description,
-  handleCollapseClick,
+  handleCollapseClick
 }) {
   return (
     <Container>
-      <TitleContainer>
+      <TaskContainer>
         <Title> {taskName} </Title>
-        <CollapseIcon src={dropdownIcon} onClick={handleCollapseClick} />
-      </TitleContainer>
-      <Divider />
-      <Description> {description} </Description>
+        <Divider />
+        <Description> {description} </Description>
+      </TaskContainer>
+      <CollapseIcon src={dropdownIcon} onClick={handleCollapseClick} />
     </Container>
   );
 }

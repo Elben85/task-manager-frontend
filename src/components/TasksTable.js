@@ -7,55 +7,70 @@ import DeleteConfirmation from "./DeleteConfirmation";
 import { useNavigate } from "react-router-dom";
 import TaskCell from "./TaskCell";
 
-const Tasklist = styled.table`
+const Tasklist = styled.div`
   display: flex;
   flex-direction: column;
-  border: 2px solid white;
   border-collapse: collapse;
   width: 98vw;
   align-self: center;
+  row-gap: 6px;
+  font-size: 25px;
 `;
-const Row = styled.tr`
-  border: 2px solid white;
+const Row = styled.div`
+  width: 100%
+  border: 2px solid black;
   display: flex;
+  background: black;
+  color:white;
+  box-shadow: 0px 0px 4px 0px white;
+  border-radius: 10px;
 `;
-const No = styled.th`
-  border: 2px solid white;
-  padding: 10px;
-  width: 50px;
-  flex: 0 0 auto;
+
+const TaskHeader = styled.div`
+  border: 3px solid #004eff;
+  padding: 10px 76px 10px 10px;
+  flex: 1 1 auto;
+  overflow-wrap: break-word;
+  -ms-word-break: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  border-radius: 10px 0px 0px 10px;
 `;
-const ToDo = styled.th`
-  border: 2px solid white;
+
+const ToDo = styled.div`
+  border: 3px solid #004eff;
   padding: 10px;
   flex: 1 1 auto;
   overflow-wrap: break-word;
   -ms-word-break: break-word;
   word-wrap: break-word;
   word-break: break-word;
+  border-radius: 10px 0px 0px 10px;
 `;
-const Schedule = styled.th`
-  border: 2px solid white;
+const Schedule = styled.div`
+  border: 3px solid #004eff;
   padding: 10px;
   width: 200px;
   flex: 0 0 auto;
 `;
 
-const Options = styled.th`
+const Options = styled.div`
   display: flex;
-  border: 2px solid white;
+  border: 3px solid #004eff;
   padding: 10px;
   width: 200px;
   flex: 0 0 auto;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   column-gap: 20px;
+  border-radius: 0px 10px 10px 0px;
 `;
 
 const EditIcon = styled.img`
   transition: 0.2s;
   width: 50px;
   height: 50px;
+  border: 3px solid white;
   border-radius: 100%;
   &:hover {
     transition: 0.2s;
@@ -69,6 +84,7 @@ const DeleteIcon = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 100%;
+  border: 3px solid white;
   &:hover {
     transition: 0.2s;
     scale: 1.1;
@@ -79,7 +95,7 @@ const DeleteIcon = styled.img`
 export function TasksTable({ task, setTask }) {
   const [popUp, setPopUp] = useState({
     show: false,
-    id: "",
+    id: ""
   });
   const navigate = useNavigate();
 
@@ -95,16 +111,13 @@ export function TasksTable({ task, setTask }) {
       )}
       <Tasklist>
         <Row>
-          <No> No </No>
-          <ToDo> Tasks </ToDo>
+          <TaskHeader> Tasks </TaskHeader>
           <Schedule> Schedule </Schedule>
           <Options> Options </Options>
         </Row>
-
         {task.map((rowContent, index) => {
           return (
             <Row key={rowContent.id}>
-              <No> {index + 1} </No>
               <ToDo>
                 <TaskCell task={rowContent} />
               </ToDo>
@@ -119,7 +132,7 @@ export function TasksTable({ task, setTask }) {
                   onClick={() =>
                     setPopUp({
                       show: true,
-                      id: rowContent.id,
+                      id: rowContent.id
                     })
                   }
                 />

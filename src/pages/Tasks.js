@@ -59,8 +59,12 @@ export default function Tasks() {
 
   const filteredTask =
     searchMethod === SearchMethod.ByTitle
-      ? task.filter((elem) => elem.taskName.includes(searchInput))
-      : task.filter((elem) => elem.tags.includes(searchInput));
+      ? task.filter((elem) =>
+          elem.taskName.toUpperCase().includes(searchInput.toUpperCase())
+        )
+      : task.filter((elem) =>
+          elem.tags.toUpperCase().includes(searchInput.toUpperCase())
+        );
 
   return (
     <>

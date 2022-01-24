@@ -1,30 +1,24 @@
-import { createContext, useEffect, useState } from "react";
-import LoadingPage from "../pages/LoadingPage";
+import { createContext, useState } from "react";
 
 export const UserContext = createContext();
 
 export default function UserContextProvider({ children }) {
-  const [user, setUser] = useState({
-    isLoggedIn: false,
-    userId: "",
-    username: ""
-  });
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const currentUser = localStorage.getItem("user");
-    if (currentUser === null) {
-      return;
-    }
-    setUser(JSON.parse(currentUser));
-    setIsLoading(false);
-  }, []);
+  const currentUser = localStorage.getItem("user");
+  const [user, setUser] = useState(
+    currentUser === null
+      ? {
+          isLoggedIn: false,
+          userId: "",
+          username: ""
+        }
+      : JSON.parse(currentUser)
+  );
 
   return (
     <UserContext.Provider
       value={{ userContext: user, setUserContext: setUser }}
     >
-      {isLoading ? <LoadingPage /> : children}
+      {children}
     </UserContext.Provider>
   );
 }

@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "http://localhost:4000/api"
+  baseURL: "https://elben85-task-manager-backend.herokuapp.com/api"
 });

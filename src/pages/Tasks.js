@@ -44,7 +44,7 @@ export default function Tasks() {
   const navigate = useNavigate();
 
   const getTask = async () =>
-    API.get("/task")
+    await API.get("/task")
       .then((response) => {
         setTask(
           response.data.filter((task) => task.userId === userContext.userId)

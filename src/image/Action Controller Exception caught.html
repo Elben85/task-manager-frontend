@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Action Controller: Exception caught</title>
+  <style>
+    body {
+      background-color: #FAFAFA;
+      color: #333;
+      color-scheme: light dark;
+      supported-color-schemes: light dark;
+      margin: 0px;
+    }
+
+    body, p, ol, ul, td {
+      font-family: helvetica, verdana, arial, sans-serif;
+      font-size:   13px;
+      line-height: 18px;
+    }
+
+    pre {
+      font-size: 11px;
+      white-space: pre-wrap;
+    }
+
+    pre.box {
+      border: 1px solid #EEE;
+      padding: 10px;
+      margin: 0px;
+      width: 958px;
+    }
+
+    header {
+      color: #F0F0F0;
+      background: #C00;
+      padding: 0.5em 1.5em;
+    }
+
+    h1 {
+      overflow-wrap: break-word;
+      margin: 0.2em 0;
+      line-height: 1.1em;
+      font-size: 2em;
+    }
+
+    h2 {
+      color: #C00;
+      line-height: 25px;
+    }
+
+    .exception-message {
+      padding: 8px 0;
+    }
+
+    .exception-message .message{
+      margin-bottom: 8px;
+      line-height: 25px;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #C00;
+    }
+
+    .details {
+      border: 1px solid #D0D0D0;
+      border-radius: 4px;
+      margin: 1em 0px;
+      display: block;
+      max-width: 978px;
+    }
+
+    .summary {
+      padding: 8px 15px;
+      border-bottom: 1px solid #D0D0D0;
+      display: block;
+    }
+
+    .details pre {
+      margin: 5px;
+      border: none;
+    }
+
+    #container {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 0 1.5em;
+    }
+
+    .source * {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    .source {
+      border: 1px solid #D9D9D9;
+      background: #ECECEC;
+      max-width: 978px;
+    }
+
+    .source pre {
+      padding: 10px 0px;
+      border: none;
+    }
+
+    .source .data {
+      font-size: 80%;
+      overflow: auto;
+      background-color: #FFF;
+    }
+
+    .info {
+      padding: 0.5em;
+    }
+
+    .source .data .line_numbers {
+      background-color: #ECECEC;
+      color: #AAA;
+      padding: 1em .5em;
+      border-right: 1px solid #DDD;
+      text-align: right;
+    }
+
+    .line {
+      padding-left: 10px;
+      white-space: pre;
+    }
+
+    .line:hover {
+      background-color: #F6F6F6;
+    }
+
+    .line.active {
+      background-color: #FCC;
+    }
+
+    .button_to {
+      display: inline-block;
+      margin-top: 0.75em;
+      margin-bottom: 0.75em;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    input[type="submit"] {
+      color: white;
+      background-color: #C00;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 3px #F99;
+      font-size: 13px;
+      font-weight: bold;
+      margin: 0;
+      padding: 10px 18px;
+      -webkit-appearance: none;
+    }
+    input[type="submit"]:focus,
+    input[type="submit"]:hover {
+      opacity: 0.8;
+    }
+    input[type="submit"]:active {
+      box-shadow: 0 2px #F99;
+      transform: translateY(1px)
+    }
+
+
+    a { color: #980905; }
+    a:visited { color: #666; }
+    a.trace-frames {
+      color: #666;
+      overflow-wrap: break-word;
+    }
+    a:hover { color: #C00; }
+    a.trace-frames.selected { color: #C00 }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #222;
+        color: #ECECEC;
+      }
+
+      .details {
+        border-color: #666;
+      }
+
+      .summary {
+        border-color: #666;
+      }
+
+      .source {
+        border-color: #555;
+        background-color: #333;
+      }
+
+      .source .data {
+        background: #444;
+      }
+
+      .source .data .line_numbers {
+        background: #333;
+        border-color: #222;
+      }
+
+      .line:hover {
+        background: #666;
+      }
+
+      .line.active {
+        background-color: #900;
+      }
+
+      input[type="submit"] {
+        box-shadow: 0 3px #800;
+      }
+      input[type="submit"]:active {
+        box-shadow: 0 2px #800;
+      }
+
+      a { color: #C00; }
+      a.trace-frames { color: #999; }
+      a:hover { color: #E9382B; }
+      a.trace-frames.selected { color: #E9382B; }
+    }
+
+      #route_table {
+    margin: 0;
+    border-collapse: collapse;
+  }
+
+  #route_table thead tr {
+    border-bottom: 2px solid #ddd;
+  }
+
+  #route_table thead tr.bottom {
+    border-bottom: none;
+  }
+
+  #route_table thead tr.bottom th {
+    padding: 10px 0;
+    line-height: 15px;
+  }
+
+  #route_table thead tr.bottom th input#search {
+    -webkit-appearance: textfield;
+  }
+
+  #route_table tbody tr {
+    border-bottom: 1px solid #ddd;
+  }
+
+  #route_table tbody tr:nth-child(odd) {
+    background: #f2f2f2;
+  }
+
+  #route_table tbody.exact_matches,
+  #route_table tbody.fuzzy_matches {
+    background-color: LightGoldenRodYellow;
+    border-bottom: solid 2px SlateGrey;
+  }
+
+  #route_table tbody.exact_matches tr,
+  #route_table tbody.fuzzy_matches tr {
+    background: none;
+    border-bottom: none;
+  }
+
+  #route_table td {
+    padding: 4px 30px;
+  }
+
+  #path_search {
+    width: 80%;
+    font-size: inherit;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: #222;
+      color: #ECECEC;
+    }
+
+    #route_table tbody tr:nth-child(odd) {
+      background: #333;
+    }
+
+    #route_table tbody tr:nth-child(even) {
+      background: #444;
+    }
+
+    #route_table tbody.exact_matches,
+    #route_table tbody.fuzzy_matches {
+      color: #333;
+    }
+  }
+
+  </style>
+
+  <script>
+    var toggle = function(id) {
+      var s = document.getElementById(id).style;
+      s.display = s.display == 'none' ? 'block' : 'none';
+      return false;
+    }
+    var show = function(id) {
+      document.getElementById(id).style.display = 'block';
+    }
+    var hide = function(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+    var toggleTrace = function() {
+      return toggle('blame_trace');
+    }
+    var toggleSessionDump = function() {
+      return toggle('session_dump');
+    }
+    var toggleEnvDump = function() {
+      return toggle('env_dump');
+    }
+  </script>
+</head>
+<body>
+
+<header>
+  <h1>Routing Error</h1>
+</header>
+<div id="container">
+  <h2>No route matches [GET] "/api"</h2>
+
+  
+<p><code>Rails.root: /home/elben85/Desktop/Project/task-manager-backend</code></p>
+
+<div id="traces-0">
+    <a href="#" onclick="hide('Framework-Trace-0');hide('Full-Trace-0');show('Application-Trace-0');; return false;">Application Trace</a> |
+    <a href="#" onclick="hide('Application-Trace-0');hide('Full-Trace-0');show('Framework-Trace-0');; return false;">Framework Trace</a> |
+    <a href="#" onclick="hide('Application-Trace-0');hide('Framework-Trace-0');show('Full-Trace-0');; return false;">Full Trace</a> 
+
+    <div id="Application-Trace-0" style="display: block;">
+      <code style="font-size: 11px;">
+      </code>
+    </div>
+    <div id="Framework-Trace-0" style="display: none;">
+      <code style="font-size: 11px;">
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="0" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/debug_exceptions.rb:33:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="1" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="2" href="#">
+            railties (6.1.4.4) lib/rails/rack/logger.rb:37:in `call_app'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="3" href="#">
+            railties (6.1.4.4) lib/rails/rack/logger.rb:26:in `block in call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="4" href="#">
+            activesupport (6.1.4.4) lib/active_support/tagged_logging.rb:99:in `block in tagged'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="5" href="#">
+            activesupport (6.1.4.4) lib/active_support/tagged_logging.rb:37:in `tagged'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="6" href="#">
+            activesupport (6.1.4.4) lib/active_support/tagged_logging.rb:99:in `tagged'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="7" href="#">
+            railties (6.1.4.4) lib/rails/rack/logger.rb:26:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="8" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="9" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/request_id.rb:26:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="10" href="#">
+            rack (2.2.3) lib/rack/runtime.rb:22:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="11" href="#">
+            activesupport (6.1.4.4) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="12" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/executor.rb:14:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="13" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/static.rb:24:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="14" href="#">
+            rack (2.2.3) lib/rack/sendfile.rb:110:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="15" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/host_authorization.rb:119:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="16" href="#">
+            rack-cors (1.1.1) lib/rack/cors.rb:100:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="17" href="#">
+            railties (6.1.4.4) lib/rails/engine.rb:539:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="18" href="#">
+            puma (5.5.2) lib/puma/configuration.rb:249:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="19" href="#">
+            puma (5.5.2) lib/puma/request.rb:77:in `block in handle_request'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="20" href="#">
+            puma (5.5.2) lib/puma/thread_pool.rb:340:in `with_force_shutdown'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="21" href="#">
+            puma (5.5.2) lib/puma/request.rb:76:in `handle_request'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="22" href="#">
+            puma (5.5.2) lib/puma/server.rb:447:in `process_client'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="23" href="#">
+            puma (5.5.2) lib/puma/thread_pool.rb:147:in `block in spawn_thread'
+          </a>
+          <br>
+      </code>
+    </div>
+    <div id="Full-Trace-0" style="display: none;">
+      <code style="font-size: 11px;">
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="0" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/debug_exceptions.rb:33:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="1" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="2" href="#">
+            railties (6.1.4.4) lib/rails/rack/logger.rb:37:in `call_app'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="3" href="#">
+            railties (6.1.4.4) lib/rails/rack/logger.rb:26:in `block in call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="4" href="#">
+            activesupport (6.1.4.4) lib/active_support/tagged_logging.rb:99:in `block in tagged'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="5" href="#">
+            activesupport (6.1.4.4) lib/active_support/tagged_logging.rb:37:in `tagged'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="6" href="#">
+            activesupport (6.1.4.4) lib/active_support/tagged_logging.rb:99:in `tagged'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="7" href="#">
+            railties (6.1.4.4) lib/rails/rack/logger.rb:26:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="8" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="9" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/request_id.rb:26:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="10" href="#">
+            rack (2.2.3) lib/rack/runtime.rb:22:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="11" href="#">
+            activesupport (6.1.4.4) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="12" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/executor.rb:14:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="13" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/static.rb:24:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="14" href="#">
+            rack (2.2.3) lib/rack/sendfile.rb:110:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="15" href="#">
+            actionpack (6.1.4.4) lib/action_dispatch/middleware/host_authorization.rb:119:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="16" href="#">
+            rack-cors (1.1.1) lib/rack/cors.rb:100:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="17" href="#">
+            railties (6.1.4.4) lib/rails/engine.rb:539:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="18" href="#">
+            puma (5.5.2) lib/puma/configuration.rb:249:in `call'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="19" href="#">
+            puma (5.5.2) lib/puma/request.rb:77:in `block in handle_request'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="20" href="#">
+            puma (5.5.2) lib/puma/thread_pool.rb:340:in `with_force_shutdown'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="21" href="#">
+            puma (5.5.2) lib/puma/request.rb:76:in `handle_request'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="22" href="#">
+            puma (5.5.2) lib/puma/server.rb:447:in `process_client'
+          </a>
+          <br>
+          <a class="trace-frames trace-frames-0" data-exception-object-id="22820" data-frame-id="23" href="#">
+            puma (5.5.2) lib/puma/thread_pool.rb:147:in `block in spawn_thread'
+          </a>
+          <br>
+      </code>
+    </div>
+
+  <script type="text/javascript">
+    (function() {
+      var traceFrames = document.getElementsByClassName('trace-frames-0');
+      var selectedFrame, currentSource = document.getElementById('frame-source-0-0');
+
+      // Add click listeners for all stack frames
+      for (var i = 0; i < traceFrames.length; i++) {
+        traceFrames[i].addEventListener('click', function(e) {
+          e.preventDefault();
+          var target = e.target;
+          var frame_id = target.dataset.frameId;
+
+          if (selectedFrame) {
+            selectedFrame.className = selectedFrame.className.replace("selected", "");
+          }
+
+          target.className += " selected";
+          selectedFrame = target;
+
+          // Change the extracted source code
+          changeSourceExtract(frame_id);
+        });
+
+        function changeSourceExtract(frame_id) {
+          var el = document.getElementById('frame-source-0-' + frame_id);
+          if (currentSource && el) {
+            currentSource.className += " hidden";
+            el.className = el.className.replace(" hidden", "");
+            currentSource = el;
+          }
+        }
+      }
+    })();
+  </script>
+</div>
+
+
+    <h2>
+      Routes
+    </h2>
+
+    <p>
+      Routes match in priority from top to bottom
+    </p>
+
+    
+<table id="route_table" class="route_table">
+  <thead>
+    <tr>
+      <th>Helper</th>
+      <th>HTTP Verb</th>
+      <th>Path</th>
+      <th>Controller#Action</th>
+    </tr>
+    <tr class="bottom">
+      <th>
+        <a data-route-helper="_path" title="Returns a relative path (without the http or domain)" href="#">Path</a> /
+        <a data-route-helper="_url" title="Returns an absolute URL (with the http and domain)" href="#">Url</a>
+      </th>
+      <th>
+      </th>
+      <th>
+        <input id="search" placeholder="Path Match" type="search" name="path[]">
+      </th>
+      <th>
+      </th>
+    </tr>
+  </thead>
+  <tbody class="exact_matches" id="exact_matches"></tbody>
+  <tbody class="fuzzy_matches" id="fuzzy_matches"></tbody>
+  <tbody>
+    <tr class="route_row" data-helper="path">
+  <td data-route-name="task_index">
+      task_index<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/api/task(.:format)">
+    /api/task(.:format)
+  </td>
+  <td>
+    <p>task#index</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path="/api/task(.:format)">
+    /api/task(.:format)
+  </td>
+  <td>
+    <p>task#create</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="task">
+      task<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/api/task/:id(.:format)">
+    /api/task/:id(.:format)
+  </td>
+  <td>
+    <p>task#show</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    PATCH
+  </td>
+  <td data-route-path="/api/task/:id(.:format)">
+    /api/task/:id(.:format)
+  </td>
+  <td>
+    <p>task#update</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path="/api/task/:id(.:format)">
+    /api/task/:id(.:format)
+  </td>
+  <td>
+    <p>task#update</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    DELETE
+  </td>
+  <td data-route-path="/api/task/:id(.:format)">
+    /api/task/:id(.:format)
+  </td>
+  <td>
+    <p>task#destroy</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="login_users">
+      login_users<span class="helper">_path</span>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path="/api/users/login(.:format)">
+    /api/users/login(.:format)
+  </td>
+  <td>
+    <p>users#login</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="users">
+      users<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/api/users(.:format)">
+    /api/users(.:format)
+  </td>
+  <td>
+    <p>users#index</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path="/api/users(.:format)">
+    /api/users(.:format)
+  </td>
+  <td>
+    <p>users#create</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="user">
+      user<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/api/users/:id(.:format)">
+    /api/users/:id(.:format)
+  </td>
+  <td>
+    <p>users#show</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    PATCH
+  </td>
+  <td data-route-path="/api/users/:id(.:format)">
+    /api/users/:id(.:format)
+  </td>
+  <td>
+    <p>users#update</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path="/api/users/:id(.:format)">
+    /api/users/:id(.:format)
+  </td>
+  <td>
+    <p>users#update</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    DELETE
+  </td>
+  <td data-route-path="/api/users/:id(.:format)">
+    /api/users/:id(.:format)
+  </td>
+  <td>
+    <p>users#destroy</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_postmark_inbound_emails">
+      rails_postmark_inbound_emails<span class="helper">_path</span>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path="/rails/action_mailbox/postmark/inbound_emails(.:format)">
+    /rails/action_mailbox/postmark/inbound_emails(.:format)
+  </td>
+  <td>
+    <p>action_mailbox/ingresses/postmark/inbound_emails#create</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_relay_inbound_emails">
+      rails_relay_inbound_emails<span class="helper">_path</span>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path="/rails/action_mailbox/relay/inbound_emails(.:format)">
+    /rails/action_mailbox/relay/inbound_emails(.:format)
+  </td>
+  <td>
+    <p>action_mailbox/ingresses/relay/inbound_emails#create</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_sendgrid_inbound_emails">
+      rails_sendgrid_inbound_emails<span class="helper">_path</span>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path="/rails/action_mailbox/sendgrid/inbound_emails(.:format)">
+    /rails/action_mailbox/sendgrid/inbound_emails(.:format)
+  </td>
+  <td>
+    <p>action_mailbox/ingresses/sendgrid/inbound_emails#create</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_mandrill_inbound_health_check">
+      rails_mandrill_inbound_health_check<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/rails/action_mailbox/mandrill/inbound_emails(.:format)">
+    /rails/action_mailbox/mandrill/inbound_emails(.:format)
+  </td>
+  <td>
+    <p>action_mailbox/ingresses/mandrill/inbound_emails#health_check</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_mandrill_inbound_emails">
+      rails_mandrill_inbound_emails<span class="helper">_path</span>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path="/rails/action_mailbox/mandrill/inbound_emails(.:format)">
+    /rails/action_mailbox/mandrill/inbound_emails(.:format)
+  </td>
+  <td>
+    <p>action_mailbox/ingresses/mandrill/inbound_emails#create</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_mailgun_inbound_emails">
+      rails_mailgun_inbound_emails<span class="helper">_path</span>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path="/rails/action_mailbox/mailgun/inbound_emails/mime(.:format)">
+    /rails/action_mailbox/mailgun/inbound_emails/mime(.:format)
+  </td>
+  <td>
+    <p>action_mailbox/ingresses/mailgun/inbound_emails#create</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_conductor_inbound_emails">
+      rails_conductor_inbound_emails<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/rails/conductor/action_mailbox/inbound_emails(.:format)">
+    /rails/conductor/action_mailbox/inbound_emails(.:format)
+  </td>
+  <td>
+    <p>rails/conductor/action_mailbox/inbound_emails#index</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path="/rails/conductor/action_mailbox/inbound_emails(.:format)">
+    /rails/conductor/action_mailbox/inbound_emails(.:format)
+  </td>
+  <td>
+    <p>rails/conductor/action_mailbox/inbound_emails#create</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_conductor_inbound_email">
+      rails_conductor_inbound_email<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/rails/conductor/action_mailbox/inbound_emails/:id(.:format)">
+    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)
+  </td>
+  <td>
+    <p>rails/conductor/action_mailbox/inbound_emails#show</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    PATCH
+  </td>
+  <td data-route-path="/rails/conductor/action_mailbox/inbound_emails/:id(.:format)">
+    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)
+  </td>
+  <td>
+    <p>rails/conductor/action_mailbox/inbound_emails#update</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path="/rails/conductor/action_mailbox/inbound_emails/:id(.:format)">
+    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)
+  </td>
+  <td>
+    <p>rails/conductor/action_mailbox/inbound_emails#update</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    DELETE
+  </td>
+  <td data-route-path="/rails/conductor/action_mailbox/inbound_emails/:id(.:format)">
+    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)
+  </td>
+  <td>
+    <p>rails/conductor/action_mailbox/inbound_emails#destroy</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="new_rails_conductor_inbound_email_source">
+      new_rails_conductor_inbound_email_source<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/rails/conductor/action_mailbox/inbound_emails/sources/new(.:format)">
+    /rails/conductor/action_mailbox/inbound_emails/sources/new(.:format)
+  </td>
+  <td>
+    <p>rails/conductor/action_mailbox/inbound_emails/sources#new</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_conductor_inbound_email_sources">
+      rails_conductor_inbound_email_sources<span class="helper">_path</span>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path="/rails/conductor/action_mailbox/inbound_emails/sources(.:format)">
+    /rails/conductor/action_mailbox/inbound_emails/sources(.:format)
+  </td>
+  <td>
+    <p>rails/conductor/action_mailbox/inbound_emails/sources#create</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_conductor_inbound_email_reroute">
+      rails_conductor_inbound_email_reroute<span class="helper">_path</span>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path="/rails/conductor/action_mailbox/:inbound_email_id/reroute(.:format)">
+    /rails/conductor/action_mailbox/:inbound_email_id/reroute(.:format)
+  </td>
+  <td>
+    <p>rails/conductor/action_mailbox/reroutes#create</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_service_blob">
+      rails_service_blob<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/rails/active_storage/blobs/redirect/:signed_id/*filename(.:format)">
+    /rails/active_storage/blobs/redirect/:signed_id/*filename(.:format)
+  </td>
+  <td>
+    <p>active_storage/blobs/redirect#show</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_service_blob_proxy">
+      rails_service_blob_proxy<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/rails/active_storage/blobs/proxy/:signed_id/*filename(.:format)">
+    /rails/active_storage/blobs/proxy/:signed_id/*filename(.:format)
+  </td>
+  <td>
+    <p>active_storage/blobs/proxy#show</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/rails/active_storage/blobs/:signed_id/*filename(.:format)">
+    /rails/active_storage/blobs/:signed_id/*filename(.:format)
+  </td>
+  <td>
+    <p>active_storage/blobs/redirect#show</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_blob_representation">
+      rails_blob_representation<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/rails/active_storage/representations/redirect/:signed_blob_id/:variation_key/*filename(.:format)">
+    /rails/active_storage/representations/redirect/:signed_blob_id/:variation_key/*filename(.:format)
+  </td>
+  <td>
+    <p>active_storage/representations/redirect#show</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_blob_representation_proxy">
+      rails_blob_representation_proxy<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/rails/active_storage/representations/proxy/:signed_blob_id/:variation_key/*filename(.:format)">
+    /rails/active_storage/representations/proxy/:signed_blob_id/:variation_key/*filename(.:format)
+  </td>
+  <td>
+    <p>active_storage/representations/proxy#show</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="">
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format)">
+    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format)
+  </td>
+  <td>
+    <p>active_storage/representations/redirect#show</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_disk_service">
+      rails_disk_service<span class="helper">_path</span>
+  </td>
+  <td>
+    GET
+  </td>
+  <td data-route-path="/rails/active_storage/disk/:encoded_key/*filename(.:format)">
+    /rails/active_storage/disk/:encoded_key/*filename(.:format)
+  </td>
+  <td>
+    <p>active_storage/disk#show</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="update_rails_disk_service">
+      update_rails_disk_service<span class="helper">_path</span>
+  </td>
+  <td>
+    PUT
+  </td>
+  <td data-route-path="/rails/active_storage/disk/:encoded_token(.:format)">
+    /rails/active_storage/disk/:encoded_token(.:format)
+  </td>
+  <td>
+    <p>active_storage/disk#update</p>
+  </td>
+</tr>
+<tr class="route_row" data-helper="path">
+  <td data-route-name="rails_direct_uploads">
+      rails_direct_uploads<span class="helper">_path</span>
+  </td>
+  <td>
+    POST
+  </td>
+  <td data-route-path="/rails/active_storage/direct_uploads(.:format)">
+    /rails/active_storage/direct_uploads(.:format)
+  </td>
+  <td>
+    <p>active_storage/direct_uploads#create</p>
+  </td>
+</tr>
+
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  // support forEach iterator on NodeList
+  NodeList.prototype.forEach = Array.prototype.forEach;
+
+  // Enables path search functionality
+  function setupMatchPaths() {
+    // Check if there are any matched results in a section
+    function checkNoMatch(section, noMatchText) {
+      if (section.children.length <= 1) {
+        section.innerHTML += noMatchText;
+      }
+    }
+
+    // get JSON from URL and invoke callback with result
+    function getJSON(url, success) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url);
+      xhr.onload = function() {
+        if (this.status == 200)
+          success(JSON.parse(this.response));
+      };
+      xhr.send();
+    }
+
+    function delayedKeyup(input, callback) {
+      var timeout;
+      input.onkeyup = function(){
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(callback, 300);
+      }
+    }
+
+    // remove params or fragments
+    function sanitizePath(path) {
+      return path.replace(/[#?].*/, '');
+    }
+
+    var pathElements = document.querySelectorAll('#route_table [data-route-path]'),
+        searchElem   = document.querySelector('#search'),
+        exactSection = document.querySelector('#exact_matches'),
+        fuzzySection = document.querySelector('#fuzzy_matches');
+
+    // Remove matches when no search value is present
+    searchElem.onblur = function(e) {
+      if (searchElem.value === "") {
+        exactSection.innerHTML = "";
+        fuzzySection.innerHTML = "";
+      }
+    }
+
+    // On key press perform a search for matching paths
+    delayedKeyup(searchElem, function() {
+      var path = sanitizePath(searchElem.value),
+          defaultExactMatch = '<tr><th colspan="4">Paths Matching (' + path +'):</th></tr>',
+          defaultFuzzyMatch = '<tr><th colspan="4">Paths Containing (' + path +'):</th></tr>',
+          noExactMatch      = '<tr><th colspan="4">No Exact Matches Found</th></tr>',
+          noFuzzyMatch      = '<tr><th colspan="4">No Fuzzy Matches Found</th></tr>';
+
+      if (!path)
+        return searchElem.onblur();
+
+      getJSON('/rails/info/routes?path=' + path, function(matches){
+        // Clear out results section
+        exactSection.innerHTML = defaultExactMatch;
+        fuzzySection.innerHTML = defaultFuzzyMatch;
+
+        // Display exact matches and fuzzy matches
+        pathElements.forEach(function(elem) {
+          var elemPath = elem.getAttribute('data-route-path');
+
+          if (matches['exact'].indexOf(elemPath) != -1)
+            exactSection.appendChild(elem.parentNode.cloneNode(true));
+
+          if (matches['fuzzy'].indexOf(elemPath) != -1)
+            fuzzySection.appendChild(elem.parentNode.cloneNode(true));
+        })
+
+        // Display 'No Matches' message when no matches are found
+        checkNoMatch(exactSection, noExactMatch);
+        checkNoMatch(fuzzySection, noFuzzyMatch);
+      })
+    })
+  }
+
+  // Enables functionality to toggle between `_path` and `_url` helper suffixes
+  function setupRouteToggleHelperLinks() {
+
+    // Sets content for each element
+    function setValOn(elems, val) {
+      elems.forEach(function(elem) {
+        elem.innerHTML = val;
+      });
+    }
+
+    // Sets onClick event for each element
+    function onClick(elems, func) {
+      elems.forEach(function(elem) {
+        elem.onclick = func;
+      });
+    }
+
+    var toggleLinks = document.querySelectorAll('#route_table [data-route-helper]');
+
+    onClick(toggleLinks, function(){
+      var helperTxt   = this.getAttribute("data-route-helper"),
+          helperElems = document.querySelectorAll('[data-route-name] span.helper');
+
+      setValOn(helperElems, helperTxt);
+    });
+  }
+
+  setupMatchPaths();
+  setupRouteToggleHelperLinks();
+
+  // Focus the search input after page has loaded
+  document.getElementById('search').focus();
+</script>
+
+
+  
+<h2 style="margin-top: 30px">Request</h2>
+  <p><b>Parameters</b>:</p> <pre>None</pre>
+
+<div class="details">
+  <div class="summary"><a href="#" onclick="return toggleSessionDump()">Toggle session dump</a></div>
+  <div id="session_dump" style="display:none"><pre></pre></div>
+</div>
+
+<div class="details">
+  <div class="summary"><a href="#" onclick="return toggleEnvDump()">Toggle env dump</a></div>
+  <div id="env_dump" style="display:none"><pre>GATEWAY_INTERFACE: "CGI/1.2"
+HTTP_ACCEPT: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
+HTTP_ACCEPT_ENCODING: "gzip, deflate"
+HTTP_ACCEPT_LANGUAGE: "en-US,en;q=0.5"
+HTTP_VERSION: "HTTP/1.1"
+ORIGINAL_SCRIPT_NAME: ""
+REMOTE_ADDR: "127.0.0.1"
+SERVER_NAME: "localhost"
+SERVER_PROTOCOL: "HTTP/1.1"</pre></div>
+</div>
+
+<h2 style="margin-top: 30px">Response</h2>
+<p><b>Headers</b>:</p> <pre>None</pre>
+
+</div>
+
+
+
+
+</body></html>

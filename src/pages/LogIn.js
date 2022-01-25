@@ -4,6 +4,7 @@ import { useEffect, useState, useContext } from "react";
 import API from "../API/API";
 import { UserContext } from "../components/UserContext";
 import WrongPasswordPopUp from "../components/WrongPasswordPopUp";
+import LoadingPage from "./LoadingPage";
 
 const Container = styled.div`
   display: flex;
@@ -66,39 +67,31 @@ const Submit = styled.button`
 `;
 
 export default function LogIn() {
-  const [userList, setUserList] = useState([]);
   const [credentials, setCredentials] = useState({
     username: "",
     password: ""
   });
   const [showPopUp, setShowPopUp] = useState(false);
   const { setUserContext } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(async () => {
-    const response = await API.get("/users");
-    setUserList(response.data);
-  }, []);
-
-  function handleSubmit(e) {
-    const filtered = userList.filter(
-      (user) =>
-        user.username === credentials.username &&
-        user.password === credentials.password
-    );
-
-    if (filtered.length === 0) {
+  async function handleSubmit(e) {
+    setIsLoading(true);
+    const response = await API.post("/users/login", credentials);
+    if (Object.keys(response.data).length === 0) {
       setShowPopUp(true);
     } else {
       const user = {
         isLoggedIn: true,
-        userId: filtered[0].id,
-        username: filtered[0].username
+        userId: response.data.id,
+        username: response.data.username
       };
       setUserContext(user);
       localStorage.setItem("user", JSON.stringify(user));
       navigate("/Tasks");
     }
+    setIsLoading(false);
   }
 
   function handleChange(event) {
@@ -108,6 +101,9 @@ export default function LogIn() {
     });
   }
 
+  if (isLoading) {
+    return <LoadingPage />;
+  }
   return (
     <>
       <Container>

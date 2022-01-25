@@ -49,7 +49,7 @@ export default function SignOut() {
       username: ""
     };
     setUserContext(user);
-    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.removeItem("token");
     navigate("/LogIn");
   }
 

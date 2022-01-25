@@ -84,11 +84,12 @@ export default function LogIn() {
     } else {
       const user = {
         isLoggedIn: true,
-        userId: response.data.id,
-        username: response.data.username
+        userId: response.data.userId,
+        username: response.data.username,
+        token: response.data.token
       };
       setUserContext(user);
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", response.data.token);
       navigate("/Tasks");
     }
     setIsLoading(false);

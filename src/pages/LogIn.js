@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import API from "../API/API";
 import { UserContext } from "../components/UserContext";
 import WrongPasswordPopUp from "../components/WrongPasswordPopUp";

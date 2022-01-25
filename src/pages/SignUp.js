@@ -4,7 +4,7 @@ import { useState } from "react";
 import { SignUpError } from "../components/enum";
 import API from "../API/API";
 import SignUpPopUp from "../components/SignUpPopUp";
-import LoadingPage from "./LandingPage";
+import LoadingPage from "./LoadingPage";
 
 const Container = styled.div`
   display: flex;

@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SignUpError } from "../components/enum";
 import API from "../API/API";
 import SignUpPopUp from "../components/SignUpPopUp";
+import LoadingPage from "./LandingPage";
 
 const Container = styled.div`
   display: flex;
@@ -70,21 +71,16 @@ export default function SignUp() {
     username: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    confirmPassword: ""
   });
-  const [usersList, setUsersList] = useState();
   const [popUp, setPopUp] = useState(SignUpError.None);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(async () => {
-    const response = await API.get("/users");
-    setUsersList(response.data);
-  }, []);
 
   function handleChange(event) {
     setInput({
       ...input,
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value
     });
   }
 
@@ -95,32 +91,32 @@ export default function SignUp() {
     return re.test(input.email);
   }
 
-  function isUsernameUnavailable() {
-    return (
-      usersList.filter((user) => user.username === input.username).length > 0
-    );
-  }
-
-  function isEmailUnavailable() {
-    return usersList.filter((user) => user.email === input.email).length > 0;
-  }
-
   async function handleSubmit() {
     if (!validateEmail()) {
       setPopUp(SignUpError.NotAnEmail);
     } else if (input.password !== input.confirmPassword) {
       setPopUp(SignUpError.PasswordDontMatch);
-    } else if (isUsernameUnavailable()) {
-      setPopUp(SignUpError.UsernameUnavailable);
-    } else if (isEmailUnavailable()) {
-      setPopUp(SignUpError.EmailUnavailable);
     } else {
-      await API.post("/users", {
+      setIsLoading(true);
+      const data = await API.post("/users/signup", {
         username: input.username,
         email: input.email,
-        password: input.password,
-      }).then(navigate("/LogIn"));
+        password: input.password
+      }).then((response) => response.data);
+      if (data.error === SignUpError.UsernameUnavailable) {
+        setPopUp(SignUpError.UsernameUnavailable);
+        setIsLoading(false);
+      } else if (data.error === SignUpError.EmailUnavailable) {
+        setPopUp(SignUpError.EmailUnavailable);
+        setIsLoading(false);
+      } else {
+        navigate("/LogIn");
+      }
     }
+  }
+
+  if (isLoading) {
+    return <LoadingPage />;
   }
 
   return (
